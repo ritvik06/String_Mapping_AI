@@ -1,8 +1,7 @@
-#include<iostream>
-#include<vector>
-#include<string>
+#include<bits/stdc++.h>
+#include<chrono>
 
-int max_length=4;
+int max_length=6;
 
 using namespace std;
 
@@ -56,7 +55,6 @@ vector<vector<int> > init_state(vector<vector<int> > str_arr){
 
 int local_search(vector<vector<int> > arr){
 	int counter=0,prev_cost,curr_cost;
-	vector<int> column;
 	vector<int>::iterator itr;
 	prev_cost = cost(arr);
 
@@ -105,13 +103,47 @@ int local_search(vector<vector<int> > arr){
 }
 
 int main(){
-	vector<vector<int> > vec {{1,2,1,3},
-							  {2,3},
-							  {3,1,2}};
+	// vector<vector<int> > vec {{1,2,1,3,2,1,2,1,3,2,3,1,1,3,2,1},
+	// 						  {2,3,3,2,2,3,1,3,2,2,1,2,3,1,2},
+	// 						  {3,1,2,1,2,3,2,2,1,1,2,3,2,3,2,1,2,1},
+	// 						  {3,1,2,3,2,2,1,2,2,3,1,2,2},
+	// 						  {3,1,2,2,1,1,2,3,2},
+	// 						  {2,1,1,2,3,1},
+	// 						  {2,3,1,3,2,3,2,2,3},
+	// 						  {2,3,1,2,3,2,3,2,1,2,2,3},
+	// 						  {1,3,2,2,3,1,2,2,3,2,1},
+	// 						  {1,3,2,3,2,3,1,2,3,2,1,2,3,2},
+	// 						{1,2,1,3,2,1,2,1,3,2,3,1,1,3,2,1},
+	// 						  {2,3,3,2,2,3,1,3,2,2,1,2,3,1,2},
+	// 						  {3,1,2,1,2,3,2,2,1,1,2,3,2,3,2,1,2,1},
+	// 						  {3,1,2,3,2,2,1,2,2,3,1,2,2},
+	// 						  {3,1,2,2,1,1,2,3,2},
+	// 						  {2,1,1,2,3,1},
+	// 						  {2,3,1,3,2,3,2,2,3},
+	// 						  {2,3,1,2,3,2,3,2,1,2,2,3},
+	// 						  {1,3,2,2,3,1,2,2,3,2,1},
+	// 						  {1,3,2,3,2,3,1,2,3,2,1,2,3,2},{1,2,1,3,2,1,2,1,3,2,3,1,1,3,2,1},
+	// 						  {2,3,3,2,2,3,1,3,2,2,1,2,3,1,2},
+	// 						  {3,1,2,1,2,3,2,2,1,1,2,3,2,3,2,1,2,1},
+	// 						  {3,1,2,3,2,2,1,2,2,3,1,2,2},
+	// 						  {3,1,2,2,1,1,2,3,2},
+	// 						  {2,1,1,2,3,1},
+	// 						  {2,3,1,3,2,3,2,2,3},
+	// 						  {2,3,1,2,3,2,3,2,1,2,2,3},
+	// 						  {1,3,2,2,3,1,2,2,3,2,1},
+	// 						  {1,3,2,3,2,3,1,2,3,2,1,2,3,2}};
+
+	vector<vector<int> > vec {{2,3,2,1,2,3},
+								{1,2,3,2},
+								{2,3,3,2}};
+								
 
 	vector<vector<int> > vec2(vec.size(),vector<int>(max_length,0));
 
 	// vec2 = init_state(vec);
+
+	auto start = chrono::high_resolution_clock::now();
+
 
 	for(int i=0;i<vec.size();i++){
 		for(int j=0;j<vec[i].size();j++){
@@ -119,8 +151,18 @@ int main(){
 			// cout << vec[i][j] << " ";
 		}
 	}
+
+	vec.clear();
 	cout << "Cost after local search is " << local_search(vec2) << endl; 
 
+    auto end = chrono::high_resolution_clock::now(); 
+
+    double time_taken = chrono::duration_cast<chrono::nanoseconds>(end - start).count(); 
+  
+    time_taken *= 1e-9; 
+  
+    cout << "Time taken by program is : " << fixed << time_taken << setprecision(9); 
+    cout << " sec" << endl;
 
 	return 0;
 }
