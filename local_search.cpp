@@ -1,7 +1,7 @@
 #include<bits/stdc++.h>
 #include<chrono>
 
-int max_length=6;
+int max_length=4;
 
 using namespace std;
 
@@ -133,9 +133,7 @@ int main(){
 	// 						  {1,3,2,2,3,1,2,2,3,2,1},
 	// 						  {1,3,2,3,2,3,1,2,3,2,1,2,3,2}};
 
-	vector<vector<int> > vec {{2,3,2,1,2,3},
-								{1,2,3,2},
-								{2,3,3,2}};
+	vector<vector<int> > vec {{1,2,3,4},{5,2,3},{1,3,4}};
 								
 
 	vector<vector<int> > vec2(vec.size(),vector<int>(max_length,0));
