@@ -78,9 +78,11 @@ int hfunc1(vector<string> s, int k, int start_pnt){
 		for(int i=0; i<s.size() ; i++){
 			for(int j=i+1; j<s.size(); j++){
 				// cout<<i<<"  "<<j<<endl;
-				if(s[i][pnt] != '_'){
+				if(s[i].size()>pnt){
+					if(s[i][pnt] != '_'){
 					if(!findChar(s[i][pnt],s,j,start_pnt,v))
 						cost = cost + dashMatch;
+					}	
 				}
 			}
 		}
@@ -92,12 +94,13 @@ int hfunc1(vector<string> s, int k, int start_pnt){
 	return cost;
 }
 
-int gfunc(int pnt, vector<string> s){
+int gfunc(int pnt, vector<string> &s){
 	int cost = 0;
 
 	for(int i=0; i<s.size(); i++){
 		if(s[i][pnt]=='_') cost = cost+dash_cost;
 		for(int j=i+1; j<s.size(); j++){
+			if(s[j].size()<pnt) s[j] = s[j] + "_";
 			if(s[i][pnt]!=s[j][pnt]){
 				if(s[i][pnt]=='_' || s[j][pnt]=='_' )
 					cost = cost + dashMatch;
@@ -237,7 +240,7 @@ int main(){
 		n1.g = current.g + gfunc(pnt,current.str);
 		n1.level = pnt;
 		Q.push(n1);
-		cout<<"neighbour \n";
+		// cout<<"neighbour \n";
 		neighbourNodes(Q, current.str, pnt, 0, current);
 		
 		current = Q.top();
