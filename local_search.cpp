@@ -1,9 +1,50 @@
 #include<bits/stdc++.h>
 #include<chrono>
 
-int max_length=6;
+int max_length=7;
+int dash_cost=3;
 
 using namespace std;
+
+vector<vector<int> > random_start(vector<vector<int> > arr){
+
+	vector<vector<int> > vec2(arr.size(),vector<int>(max_length,0));
+
+	// for(int i=0;i<arr.size();i++){
+	// 	for(int j=0;j<arr[i].size();j++){
+	// 		vec2[i][j]=arr[i][j];
+	// 		// cout << vec[i][j] << " ";
+	// 	}
+	// }
+
+	int dif,random,prev_random;
+	vector<int>::iterator itr;
+	srand ( time(NULL));
+
+	for(int i=0;i<arr.size();i++){
+		dif = max_length - arr[i].size();
+		cout << "Array size" << arr[i].size();
+		cout << "DIF" << dif << endl;
+		itr = arr[i].begin();
+
+		for(int j=0;j<dif;j++){
+			random = rand()%max_length;
+			if(random == prev_random){
+				random=(random+1)%(max_length);
+			}	
+			cout << "Random-" << random << endl;
+			arr[i].insert(arr[i].begin()+random,0);
+			prev_random = random;
+		}
+		for(int k=0;k<max_length;k++){
+			cout << arr[i][k] << " ";
+		}
+
+		cout << endl;
+
+	}
+	return arr;
+} 
 
 int cost(vector<vector<int> > arr){
 	int cost = 0;
@@ -102,7 +143,17 @@ int local_search(vector<vector<int> > arr){
 
 }
 
+vector<vector<int> > next_state(vector<vector<int> > arr){
+
+	for(int i=0;i<max_length;i++){
+				
+	}
+
+
+}
+
 int main(){
+	int CC;
 	// vector<vector<int> > vec {{1,2,1,3,2,1,2,1,3,2,3,1,1,3,2,1},
 	// 						  {2,3,3,2,2,3,1,3,2,2,1,2,3,1,2},
 	// 						  {3,1,2,1,2,3,2,2,1,1,2,3,2,3,2,1,2,1},
@@ -133,27 +184,29 @@ int main(){
 	// 						  {1,3,2,2,3,1,2,2,3,2,1},
 	// 						  {1,3,2,3,2,3,1,2,3,2,1,2,3,2}};
 
-	vector<vector<int> > vec {{2,3,2,1,2,3},
-								{1,2,3,2},
-								{2,3,3,2}};
-								
+	vector<vector<int> > vec {{1,2,3,4,3,4,1},
+								{3,1,2,3,4,2},
+								{1,2,3,4,1}};
 
-	vector<vector<int> > vec2(vec.size(),vector<int>(max_length,0));
-
-	// vec2 = init_state(vec);
+	vector<vector<int> > rand2;			
 
 	auto start = chrono::high_resolution_clock::now();
 
+	rand2 = random_start(vec);
+					
+	for(int i=0;i<rand2.size();i++){
+		for(int j=0;j<rand2[i].size();j++){
+			cout << rand2[i][j] << " ";
+		}
+		cout << endl;
+	}
 
 	for(int i=0;i<vec.size();i++){
-		for(int j=0;j<vec[i].size();j++){
-			vec2[i][j]=vec[i][j];
-			// cout << vec[i][j] << " ";
-		}
+		CC+=((max_length-vec[i].size())*dash_cost);
 	}
 
 	vec.clear();
-	cout << "Cost after local search is " << local_search(vec2) << endl; 
+	cout << "Cost after local search is " << (CC + local_search(vec2)) << endl; 
 
     auto end = chrono::high_resolution_clock::now(); 
 
