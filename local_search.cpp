@@ -1,7 +1,7 @@
 #include<bits/stdc++.h>
 #include<chrono>
 
-int max_length=7;
+int max_length=8;
 int dash_cost=3;
 
 using namespace std;
@@ -19,6 +19,7 @@ vector<vector<int> > random_start(vector<vector<int> > arr){
 
 	int dif,random,prev_random;
 	vector<int>::iterator itr;
+	vector<int> rand_arr;
 	srand ( time(NULL));
 
 	for(int i=0;i<arr.size();i++){
@@ -28,12 +29,21 @@ vector<vector<int> > random_start(vector<vector<int> > arr){
 		itr = arr[i].begin();
 
 		for(int j=0;j<dif;j++){
-			random = rand()%max_length;
-			if(random == prev_random){
-				random=(random+1)%(max_length);
-			}	
-			cout << "Random-" << random << endl;
-			arr[i].insert(arr[i].begin()+random,0);
+			random = rand()%max_length;			
+			rand_arr.push_back(random);
+		}
+
+
+		sort(rand_arr.begin(),rand_arr.end());
+
+		for(int j=0;j<dif;j++){
+			cout << "Random " << rand_arr[j] << " ";
+		}
+
+		cout << endl;
+
+		for(int j=0;j<dif;j++){
+			arr[i].insert(arr[i].begin()+rand_arr[j],0);
 			prev_random = random;
 		}
 		for(int k=0;k<max_length;k++){
@@ -137,19 +147,62 @@ int local_search(vector<vector<int> > arr){
 		cout << endl << endl;	
 	}
 
-
-
 	return prev_cost;	
 
 }
 
-vector<vector<int> > next_state(vector<vector<int> > arr){
+vector<int> find(vector<int> vec,int pos){
+	vector<int> list;
 
-	for(int i=0;i<max_length;i++){
-				
+	for(int i=pos+1;i<vec.size();i++){
+		if(vec[i]==0)
+			list.push_back(i);
+	}
+
+	return list;
+}
+
+int local_final(vector<vector<int> > arr){
+	int prev_cost = cost(arr),min = max_length,curr_cost=0;
+	vector<int> list;
+
+	cout << "Starting Cost " << prev_cost <<endl;
+
+	for(int j=0;j<max_length;j++){
+		for(int i=0;i<arr.size();i++){
+			list = find(arr[i],j);
+			// cout << list.size() << endl;
+			// cout << "Done" << endl;
+
+
+			for(int k=0;k<list.size();k++){
+				cout << "entered into " << k << endl;
+				swap(arr[i][j],arr[i][list[k]]);
+				curr_cost = cost(arr);
+				if (prev_cost>curr_cost){
+					min = k;
+					prev_cost = curr_cost;
+				}
+				swap(arr[i][j],arr[i][list[k]]);
+			}
+			if(list.size()!=0){
+				swap(arr[i][j],arr[i][list[min]]);
+			}
+
+		}		
+
+		cout << "Iteration no " << j << endl;
+		for(int l=0;l<arr.size();l++){
+			for(int m=0;m<max_length;m++){
+				cout << arr[l][m] << " " ;
+			}
+			cout << endl;
+		}
+
 	}
 
 
+	return prev_cost; 
 }
 
 int main(){
@@ -200,24 +253,31 @@ int main(){
 		for(int j=0;j<rand2[i].size();j++){
 			cout << rand2[i][j] << " ";
 		}
+		rand2[i].resize(max_length);
 		cout << endl;
 	}
 
-	for(int i=0;i<vec.size();i++){
-		CC+=((max_length-vec[i].size())*dash_cost);
-	}
+	// cout << "Done" << endl;
 
-	vec.clear();
-	cout << "Cost after local search is " << (CC + local_search(vec2)) << endl; 
+	int final_cost = local_final(rand2);
 
-    auto end = chrono::high_resolution_clock::now(); 
+	cout << " Final Cost is " << final_cost << endl;
 
-    double time_taken = chrono::duration_cast<chrono::nanoseconds>(end - start).count(); 
+	// for(int i=0;i<vec.size();i++){
+	// 	CC+=((max_length-vec[i].size())*dash_cost);
+	// }
+
+	// vec.clear();
+	// cout << "Cost after local search is " << (CC + local_search(vec2)) << endl; 
+
+ //    auto end = chrono::high_resolution_clock::now(); 
+
+ //    double time_taken = chrono::duration_cast<chrono::nanoseconds>(end - start).count(); 
   
-    time_taken *= 1e-9; 
+ //    time_taken *= 1e-9; 
   
-    cout << "Time taken by program is : " << fixed << time_taken << setprecision(9); 
-    cout << " sec" << endl;
+ //    cout << "Time taken by program is : " << fixed << time_taken << setprecision(9); 
+ //    cout << " sec" << endl;
 
 	return 0;
 }
