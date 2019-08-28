@@ -1,8 +1,12 @@
 #include<bits/stdc++.h>
 #include<chrono>
 
+<<<<<<< HEAD
 int max_length=7;
 int dash_cost=3;
+=======
+int max_length=4;
+>>>>>>> 457d247e9691f6044d48f5f92dc124d5f7183490
 
 using namespace std;
 
@@ -184,9 +188,11 @@ int main(){
 	// 						  {1,3,2,2,3,1,2,2,3,2,1},
 	// 						  {1,3,2,3,2,3,1,2,3,2,1,2,3,2}};
 
+
 	vector<vector<int> > vec {{1,2,3,4,3,4,1},
 								{3,1,2,3,4,2},
 								{1,2,3,4,1}};
+							
 
 	vector<vector<int> > rand2;			
 
