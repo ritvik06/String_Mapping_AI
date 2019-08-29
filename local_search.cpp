@@ -173,20 +173,27 @@ int local_final(vector<vector<int> > arr){
 			list = find(arr[i],j);
 			// cout << list.size() << endl;
 			// cout << "Done" << endl;
+			cout << "Swapable " << arr[i][j];
 
+			cout << "entered into " << list[0] << endl;
 
 			for(int k=0;k<list.size();k++){
-				cout << "entered into " << k << endl;
-				swap(arr[i][j],arr[i][list[k]]);
+				// cout << "Entered" << endl;
+				arr[i].erase(arr[i].begin()+j);
+				arr[i].insert(arr[i].begin()+list[k],0);
 				curr_cost = cost(arr);
 				if (prev_cost>curr_cost){
 					min = k;
 					prev_cost = curr_cost;
 				}
-				swap(arr[i][j],arr[i][list[k]]);
+				arr[i].erase(arr[i].begin()+list[k]);
+				arr[i].insert(arr[i].begin()+j,0);
+
+
 			}
 			if(list.size()!=0){
-				swap(arr[i][j],arr[i][list[min]]);
+				arr[i].erase(arr[i].begin()+j);
+				arr[i].insert(arr[i].begin()+list[min],0);
 			}
 
 		}		
