@@ -16,6 +16,24 @@ Output matrix:
 4 0 0 0 0 0 0 3 2
 5 3 5 5 5 5 1 4 6
 
+Cost after local search is 680
+Output matrix:
+4 0 0 0 0 0 1 0 4
+0 4 0 4 2 1 0 0 4
+0 3 0 5 1 3 0 1 3
+0 0 0 0 0 6 0 0 4
+0 4 0 0 0 0 0 3 2
+5 3 5 5 5 5 1 4 6
+
+Cost after local search is 685
+Output matrix:
+0 0 0 0 0 0 4 1 4
+0 4 0 0 4 2 1 0 4
+0 3 5 1 0 3 1 0 3
+0 0 0 0 0 6 0 0 4
+0 0 0 0 4 0 0 3 2
+5 3 5 5 5 5 1 4 6
+
 Output 8:
 Cost after local search is 1099
 Output matrix:
