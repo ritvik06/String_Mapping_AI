@@ -5,6 +5,9 @@
 
 using namespace std;
 
+int Tmax;
+int ritvik=0;
+
 int **costMatrix;
 unordered_map<char, int> charIndex; 
 unordered_map<int, char> indexChar;
@@ -29,14 +32,14 @@ void printChar(vector<vector<char> > s){
 	return;
 }
 
-vector<vector<int> > readFile(int &k, int &dashCost, string file){
-	int Tmax;		//max Time of Run
+vector<vector<int> > readFile(int &k, int &dashCost,char *file){
+
 	
 	int s_len;
 	// int k = 0; //max length of any string
 	
 	ifstream inFile;
-	inFile.open(file.c_str());
+	inFile.open(file);
 
 	if (!inFile.is_open()) 
 	{
@@ -53,8 +56,8 @@ vector<vector<int> > readFile(int &k, int &dashCost, string file){
 	int index = 1;
 	char c;
 	char comma;
-	charIndex['_'] = 0;
-	indexChar[0] = '_';
+	charIndex['-'] = 0;
+	indexChar[0] = '-';
 	for(int i=0; i<charCount; i++){
 		inFile >> c;
 		cout << c <<", ";
@@ -340,13 +343,15 @@ int local_search(vector<vector<int> > &vect, int prev_cost){
 
 }
 
-int main(){
+int main(int argc,char *argv[]){
+	
+	char *in_file = argv[1];
+	char *output_file = argv[2];
 
 	int k=0;
-	string fileName;
-	cin>>fileName;
 
-	vector<vector<int> > vect = readFile (k, dashCost, fileName);
+	vector<vector<int> > vect = readFile (k, dashCost, in_file);
+	vector<vector<char> > output_matrix;
 
 	// vector<vector<int> > v = {{2, 4, 7, 4, 7, 8, 7, 4},
 	// 							{3, 0, 0, 8, 0, 0, 0, 3},
@@ -363,11 +368,32 @@ int main(){
 
 	int bestCost = INT_MAX;
 	int extraLen = 0;
+	int time_len = 6;
 	vector<vector<int> > bestVect;
-	while(extraLen < 3){
+	ofstream output(output_file);
+
+	while(extraLen < time_len){
 		int lenBest = INT_MAX;
 		vector<vector<int> > lenVect;
 		for(int i=0; i<1000; i++){
+			auto curr = chrono::high_resolution_clock::now();
+			auto sec = curr - start;
+			// if(ritvik<5){
+			// 	cout << "Time " << (int)(sec.count()*1000) << endl;
+			// 	ritvik++;
+			// }
+				// cout << "Time " << sec.count() << endl;
+			// if ((sec.count()*1e-9)>=((3*Tmax)/4)){
+			// 	for(int i=0;i<bestVect.size();i++){
+			// 		for(int j=0;j<bestVect[i].size();j++){
+			// 			output << output_matrix[i][j];
+			// 		}
+			// 		output << endl;
+			// 	}
+			// 	cout << "Entered";
+			// 	return 0; 
+			// }				
+
 			// vect = random_startNew(vect, k);
 			// vect_copy = vect;
 			vect_rand = random_start(vect, k+extraLen);
@@ -395,14 +421,23 @@ int main(){
 	}
 	cout<<endl<<endl;
 	cout<<"BEST Cost: "<<bestCost<<endl;
-	printChar(convertBack(bestVect));
+	output_matrix = convertBack(bestVect);	
+	printChar(output_matrix);
+	
+	for(int i=0;i<bestVect.size();i++){
+		for(int j=0;j<bestVect[i].size();j++){
+			output << output_matrix[i][j];
+		}
+		output << endl;
+	} 
+
 
 	auto end = chrono::high_resolution_clock::now(); 
 
     double time_taken = chrono::duration_cast<chrono::nanoseconds>(end - start).count(); 
   
     time_taken *= 1e-9; 
-  
+ 
     cout << "Time taken by program is : " << fixed << time_taken << setprecision(9); 
     cout << " sec" << endl;
 

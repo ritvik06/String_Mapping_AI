@@ -109,6 +109,15 @@ int local_search(vector<vector<int> > arr){
 	vector<int>::iterator itr;
 	prev_cost = cost(arr);
 
+	cout << "Initial Matrix input is " << endl;
+
+	for(int l=0;l<arr.size();l++){
+		for(int m=0;m<max_length;m++){
+			cout << arr[l][m] << " ";
+		}
+		cout << endl;
+	}
+
 	cout << "Initial Matrix " << endl;
 	for(int l=0;l<arr.size();l++){
 		for(int m=0;m<max_length;m++){
