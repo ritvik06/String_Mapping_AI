@@ -104,6 +104,7 @@ vector<vector<int> > readFile(int &k, int &dashCost,char *file){
 			vect[i].push_back(val);
 		}
 	}
+	s.clear();
 	cout<<endl;
 	cout<<"Converted string input is:" <<endl;
 	// printList(vect);
@@ -122,55 +123,6 @@ vector<vector<char> > convertBack(vector<vector<int> > v){
 
 	return str;
 }
-// int costNode(vector<vector<int> > arr){
-// 	int costN = 0;
-// 	int pnt=0;
-// 	int r,c;
-// 	while(pnt<arr[0].size()){
-// 		for(int i=0; i<arr.size(); i++){
-// 			if(arr[i][pnt]==0) 
-// 			cost = cost + dashCost;
-// 			for(int j=i+1; j<arr.size(); j++){
-// 				r= arr[i][pnt]; c=arr[j][pnt];
-// 				costN = costN + cost[0][0];
-// 				cout<<cost[0][0]<<endl;
-// 				cout<<"i: "<<i<<" j: "<<j<<endl;
-// 			}
-// 		}	
-// 		pnt++;
-// 	}
-// 	cout<<"done \n";
-// 	return costN;
-// }
-
-// int costNode(vector<vector<int> > arr, int lastMin){  //lastmin to abort cost calculation the moment it exceeds the currrent minCost 
-// 	int costN = 0;
-// 	vector<int> list = {};
-
-// 	for(int counter=0;counter<arr[0].size();counter++){
-// 		list.clear();
-
-// 		for(int i=0;i<arr.size();i++){
-// 			list.push_back(arr[i][counter]);
-// 		}
-
-// 		for(int j=0;j<list.size()-1;j++){
-// 			if(list[j]==0) 
-//  				costN = costN + dashCost;
-// 			if(costN > lastMin)
-// 				break;
-// 			for(int k=j+1;k<list.size();k++){
-// 				costN = costN + costMatrix[list[j]][list[k]];
-// 				if(costN > lastMin)
-//  					break;
-// 				// cout<<cost[list[j]][list[k]]<<endl;
-// 				// cout<<"j: "<<j<<" k: "<<k<<endl;
-// 			}
-// 		}
-// 	}
-
-// 	return costN;
-// }
 
 int costNode(vector<vector<int> > arr, int lastMax){
 	int costN = 0;
@@ -203,56 +155,6 @@ int costNode(vector<vector<int> > arr, int lastMax){
 	// cout<<"done \n";
 	return costN;
 }
-
-// vector<vector<int> > random_startNew(vector<vector<int> > arr, int max_length){
-
-// 	vector<vector<int> > vec2(arr.size(),vector<int>(max_length,0));
-
-// 	// for(int i=0;i<arr.size();i++){
-// 	// 	for(int j=0;j<arr[i].size();j++){
-// 	// 		vec2[i][j]=arr[i][j];
-// 	// 		// cout << vec[i][j] << " ";
-// 	// 	}
-// 	// }
-
-// 	int dif,random,prev_random;
-// 	vector<int>::iterator itr;
-// 	vector<int> rand_arr;
-// 	srand ( time(NULL));
-
-// 	for(int i=0;i<arr.size();i++){
-// 		dif = max_length - arr[i].size();
-// 		cout << "Array size" << arr[i].size();
-// 		cout << "DIF" << dif << endl;
-// 		itr = arr[i].begin();
-
-// 		for(int j=0;j<dif;j++){
-// 			random = rand()%max_length;			
-// 			rand_arr.push_back(random);
-// 		}
-
-
-// 		sort(rand_arr.begin(),rand_arr.end());
-
-// 		for(int j=0;j<dif;j++){
-// 			cout << "Random " << rand_arr[j] << " ";
-// 		}
-
-// 		cout << endl;
-
-// 		for(int j=0;j<dif;j++){
-// 			arr[i].insert(arr[i].begin()+rand_arr[j],0);
-// 			prev_random = random;
-// 		}
-// 		for(int k=0;k<max_length;k++){
-// 			cout << arr[i][k] << " ";
-// 		}
-
-// 		cout << endl;
-
-// 	}
-// 	return arr;
-// } 
 
 vector<vector<int> > random_start(vector<vector<int> > vect, int k){
 	// srand (time(NULL));
@@ -290,6 +192,7 @@ int oneStep(vector<vector<int> > &v, int ind, int prev_cost){  //oneStep returns
 					bestVect = sample;
 					minCost = c;
 				}
+				sample.clear();
 			}
 		}
 		if(i!=0){
@@ -303,18 +206,45 @@ int oneStep(vector<vector<int> > &v, int ind, int prev_cost){  //oneStep returns
 					bestVect = sample;
 					minCost = c;
 				}
+				sample.clear();
 			}
 		}
 	}
 	v = bestVect;
+	bestVect.clear();
 	return minCost;
 
 }
 
-// int randomJump(vector<vector<int> > vect, int prev_cost){
-// 	srand(time(NULL));
-// 	int 
-// }
+void randomJump(vector<vector<int> > &vect){
+	int t=0;
+	int temp=0;
+	int zeroInd = 0;
+	for(int ind=0; ind<vect.size(); ind++){
+		t = rand()%10;
+		if(t<5){
+			zeroInd = rand()%(vect[ind].size()-2)+1;
+			int count=0;
+			while(!(vect[ind][zeroInd]==0 && (vect[ind][zeroInd+1]!=0 || vect[ind][zeroInd-1]!=0)) && count<vect[ind].size()){
+				zeroInd = rand()%(vect[ind].size()-2)+1;
+				count++;
+			}
+			if(vect[ind][zeroInd]==0){
+				if(vect[ind][zeroInd+1]!=0){
+				temp = vect[ind][zeroInd];
+				vect[ind][zeroInd] = vect[ind][zeroInd+1];
+				vect[ind][zeroInd+1] = temp;
+				}
+				else if(vect[ind][zeroInd-1]!=0){
+					temp = vect[ind][zeroInd];
+					vect[ind][zeroInd] = vect[ind][zeroInd-1];
+					vect[ind][zeroInd-1] = temp;
+				}
+			}
+		}
+	}
+	return;
+}
 
 
 int local_search(vector<vector<int> > &vect, int prev_cost){
@@ -331,6 +261,7 @@ int local_search(vector<vector<int> > &vect, int prev_cost){
 			best = vect2;
 			curr_cost = c;
 		}
+		vect2.clear();
 	}
 	// cout<<"Best till now:"<<curr_cost<<endl;
 	// printChar(convertBack(best));
@@ -339,6 +270,7 @@ int local_search(vector<vector<int> > &vect, int prev_cost){
 		curr_cost = local_search(best, curr_cost);
 		vect=best;
 	}	
+	best.clear();
 	return curr_cost;	
 
 }
@@ -375,28 +307,16 @@ int main(int argc,char *argv[]){
 	while(extraLen < time_len){
 		int lenBest = INT_MAX;
 		vector<vector<int> > lenVect;
+		vect_rand = random_start(vect, k+extraLen);
 		for(int i=0; i<1000; i++){
 			auto curr = chrono::high_resolution_clock::now();
 			auto sec = curr - start;
-			// if(ritvik<5){
-			// 	cout << "Time " << (int)(sec.count()*1000) << endl;
-			// 	ritvik++;
-			// }
-				// cout << "Time " << sec.count() << endl;
-			// if ((sec.count()*1e-9)>=((3*Tmax)/4)){
-			// 	for(int i=0;i<bestVect.size();i++){
-			// 		for(int j=0;j<bestVect[i].size();j++){
-			// 			output << output_matrix[i][j];
-			// 		}
-			// 		output << endl;
-			// 	}
-			// 	cout << "Entered";
-			// 	return 0; 
-			// }				
-
-			// vect = random_startNew(vect, k);
-			// vect_copy = vect;
-			vect_rand = random_start(vect, k+extraLen);
+			// cout<<"Before Rand Jump:"<<endl;
+			// printList(vect_rand);
+			if (rand()%10 < 5) vect_rand = random_start(vect, k+extraLen);
+			else randomJump(vect_rand);
+			// cout<<"After Rand Jump:"<<endl;
+			// printList(vect_rand);
 			// cout<<"random start: "<<endl;
 			// printList(vect_rand);
 			int initial_cost = costNode(vect_rand,INT_MAX);
@@ -418,6 +338,8 @@ int main(int argc,char *argv[]){
 			bestCost = lenBest;
 			bestVect = lenVect;
 		} 
+		lenVect.clear();
+		vect_rand.clear();
 	}
 	cout<<endl<<endl;
 	cout<<"BEST Cost: "<<bestCost<<endl;
