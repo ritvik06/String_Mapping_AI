@@ -1,3 +1,11 @@
+Output 1:
+Cost after local search is 363
+Output matrix:
+2 4 7 4 7 8 7 4
+0 0 0 3 0 0 8 3
+6 0 7 0 0 8 8 1
+0 0 5 0 0 8 0 2
+
 Output 2:
 Cost after local search is 788
 Output matrix:
