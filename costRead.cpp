@@ -7,8 +7,20 @@ using namespace std;
 
 int **costMatrix;
 unordered_map<char, int> charIndex; 
+unordered_map<int, char> indexChar;
+
 int dashCost;
+int charCount;
 void printList(vector<vector<int> > s){
+	for(int i=0; i<s.size(); i++){
+		for(int j=0; j<s[i].size();j++)
+			cout<<s[i][j]<<" ";
+		cout<<endl;
+	}
+	return;
+}
+
+void printChar(vector<vector<char> > s){
 	for(int i=0; i<s.size(); i++){
 		for(int j=0; j<s[i].size();j++)
 			cout<<s[i][j]<<" ";
@@ -19,7 +31,7 @@ void printList(vector<vector<int> > s){
 
 vector<vector<int> > readFile(int &k, int &dashCost, string file){
 	int Tmax;		//max Time of Run
-	int charCount = 0;
+	
 	int s_len;
 	// int k = 0; //max length of any string
 	
@@ -42,11 +54,13 @@ vector<vector<int> > readFile(int &k, int &dashCost, string file){
 	char c;
 	char comma;
 	charIndex['_'] = 0;
+	indexChar[0] = '_';
 	for(int i=0; i<charCount; i++){
 		inFile >> c;
 		cout << c <<", ";
 		if(i!= charCount-1) inFile >> comma;
 		charIndex[c] = i+1;
+		indexChar[i+1] = c;
 	}
 
 	cout<< endl;
@@ -93,6 +107,18 @@ vector<vector<int> > readFile(int &k, int &dashCost, string file){
 	return vect ;
 }
 
+
+vector<vector<char> > convertBack(vector<vector<int> > v){
+	vector<vector<char> > str(v.size(),vector<char>(v[0].size()));
+
+	for(int i=0; i<v.size(); i++){
+		for(int j=0 ; j<v[0].size(); j++){
+			str[i][j] = indexChar.at(v[i][j]);
+		}
+	}
+
+	return str;
+}
 // int costNode(vector<vector<int> > arr){
 // 	int costN = 0;
 // 	int pnt=0;
@@ -114,85 +140,116 @@ vector<vector<int> > readFile(int &k, int &dashCost, string file){
 // 	return costN;
 // }
 
-int costNode(vector<vector<int> > arr, int lastMin){  //lastmin to abort cost calculation the moment it exceeds the currrent minCost 
+// int costNode(vector<vector<int> > arr, int lastMin){  //lastmin to abort cost calculation the moment it exceeds the currrent minCost 
+// 	int costN = 0;
+// 	vector<int> list = {};
+
+// 	for(int counter=0;counter<arr[0].size();counter++){
+// 		list.clear();
+
+// 		for(int i=0;i<arr.size();i++){
+// 			list.push_back(arr[i][counter]);
+// 		}
+
+// 		for(int j=0;j<list.size()-1;j++){
+// 			if(list[j]==0) 
+//  				costN = costN + dashCost;
+// 			if(costN > lastMin)
+// 				break;
+// 			for(int k=j+1;k<list.size();k++){
+// 				costN = costN + costMatrix[list[j]][list[k]];
+// 				if(costN > lastMin)
+//  					break;
+// 				// cout<<cost[list[j]][list[k]]<<endl;
+// 				// cout<<"j: "<<j<<" k: "<<k<<endl;
+// 			}
+// 		}
+// 	}
+
+// 	return costN;
+// }
+
+int costNode(vector<vector<int> > arr, int lastMax){
 	int costN = 0;
-	vector<int> list = {};
+	int pnt=0;
+	int r,c;
+	while(pnt<arr[0].size()){
+		for(int i=0; i<arr.size(); i++){
+			if(arr[i][pnt]==0) 
+				costN = costN + dashCost;
+			if(costN>lastMax) break;
+			for(int j=i+1; j<arr.size(); j++){
 
-	for(int counter=0;counter<arr[0].size();counter++){
-		list.clear();
+				if(arr[i][pnt]==0 && arr[j][pnt]!=0)
+					costN = costN + costMatrix[charCount][arr[j][pnt]-1];
 
-		for(int i=0;i<arr.size();i++){
-			list.push_back(arr[i][counter]);
-		}
+				else if(arr[j][pnt]==0 && arr[i][pnt]!=0)
+					costN = costN + costMatrix[arr[i][pnt]-1][charCount];
 
-		for(int j=0;j<list.size()-1;j++){
-			if(list[j]==0) 
- 				costN = costN + dashCost;
-			if(costN > lastMin)
-				break;
-			for(int k=j+1;k<list.size();k++){
-				costN = costN + costMatrix[list[j]][list[k]];
-				if(costN > lastMin)
- 					break;
-				// cout<<cost[list[j]][list[k]]<<endl;
-				// cout<<"j: "<<j<<" k: "<<k<<endl;
+				else if(arr[j][pnt]==0 && arr[i][pnt]==0)
+					costN = costN + costMatrix[charCount][charCount];
+
+				else costN = costN + costMatrix[arr[i][pnt]-1][arr[j][pnt]-1];
+
+				if(costN>lastMax) break;
 			}
-		}
+		}	
+		if(costN>lastMax) break;
+		pnt++;
 	}
-
+	// cout<<"done \n";
 	return costN;
 }
 
+// vector<vector<int> > random_startNew(vector<vector<int> > arr, int max_length){
 
-vector<vector<int> > random_startNew(vector<vector<int> > arr, int max_length){
+// 	vector<vector<int> > vec2(arr.size(),vector<int>(max_length,0));
 
-	vector<vector<int> > vec2(arr.size(),vector<int>(max_length,0));
+// 	// for(int i=0;i<arr.size();i++){
+// 	// 	for(int j=0;j<arr[i].size();j++){
+// 	// 		vec2[i][j]=arr[i][j];
+// 	// 		// cout << vec[i][j] << " ";
+// 	// 	}
+// 	// }
 
-	// for(int i=0;i<arr.size();i++){
-	// 	for(int j=0;j<arr[i].size();j++){
-	// 		vec2[i][j]=arr[i][j];
-	// 		// cout << vec[i][j] << " ";
-	// 	}
-	// }
+// 	int dif,random,prev_random;
+// 	vector<int>::iterator itr;
+// 	vector<int> rand_arr;
+// 	srand ( time(NULL));
 
-	int dif,random,prev_random;
-	vector<int>::iterator itr;
-	vector<int> rand_arr;
-	srand ( time(NULL));
+// 	for(int i=0;i<arr.size();i++){
+// 		dif = max_length - arr[i].size();
+// 		cout << "Array size" << arr[i].size();
+// 		cout << "DIF" << dif << endl;
+// 		itr = arr[i].begin();
 
-	for(int i=0;i<arr.size();i++){
-		dif = max_length - arr[i].size();
-		cout << "Array size" << arr[i].size();
-		cout << "DIF" << dif << endl;
-		itr = arr[i].begin();
-
-		for(int j=0;j<dif;j++){
-			random = rand()%max_length;			
-			rand_arr.push_back(random);
-		}
+// 		for(int j=0;j<dif;j++){
+// 			random = rand()%max_length;			
+// 			rand_arr.push_back(random);
+// 		}
 
 
-		sort(rand_arr.begin(),rand_arr.end());
+// 		sort(rand_arr.begin(),rand_arr.end());
 
-		for(int j=0;j<dif;j++){
-			cout << "Random " << rand_arr[j] << " ";
-		}
+// 		for(int j=0;j<dif;j++){
+// 			cout << "Random " << rand_arr[j] << " ";
+// 		}
 
-		cout << endl;
+// 		cout << endl;
 
-		for(int j=0;j<dif;j++){
-			arr[i].insert(arr[i].begin()+rand_arr[j],0);
-			prev_random = random;
-		}
-		for(int k=0;k<max_length;k++){
-			cout << arr[i][k] << " ";
-		}
+// 		for(int j=0;j<dif;j++){
+// 			arr[i].insert(arr[i].begin()+rand_arr[j],0);
+// 			prev_random = random;
+// 		}
+// 		for(int k=0;k<max_length;k++){
+// 			cout << arr[i][k] << " ";
+// 		}
 
-		cout << endl;
+// 		cout << endl;
 
-	}
-	return arr;
-} 
+// 	}
+// 	return arr;
+// } 
 
 vector<vector<int> > random_start(vector<vector<int> > vect, int k){
 	// srand (time(NULL));
@@ -257,7 +314,7 @@ int oneStep(vector<vector<int> > &v, int ind, int prev_cost){  //oneStep returns
 // }
 
 
-int local_search(vector<vector<int> > vect, int prev_cost){
+int local_search(vector<vector<int> > &vect, int prev_cost){
 
 	int counter=0;
 	int curr_cost=prev_cost;
@@ -272,15 +329,13 @@ int local_search(vector<vector<int> > vect, int prev_cost){
 			curr_cost = c;
 		}
 	}
-	cout<<"Best till now:"<<curr_cost<<endl;
-	// printList(best);
-	cout<<endl;
+	// cout<<"Best till now:"<<curr_cost<<endl;
+	// printChar(convertBack(best));
+	// cout<<endl;
 	if(best!=vect){
 		curr_cost = local_search(best, curr_cost);
+		vect=best;
 	}	
-	// else{
-	// 	randomJump(best, curr_cost);
-	// }
 	return curr_cost;	
 
 }
@@ -293,35 +348,63 @@ int main(){
 
 	vector<vector<int> > vect = readFile (k, dashCost, fileName);
 
+	// vector<vector<int> > v = {{2, 4, 7, 4, 7, 8, 7, 4},
+	// 							{3, 0, 0, 8, 0, 0, 0, 3},
+	// 							{6, 0, 0, 0, 7, 8, 8, 1},
+	// 							{5, 0, 0, 0, 8, 0, 0, 2}};
+
+	// cout<<"cost node: "<<costNode(v, INT_MAX);
+	// printChar(convertBack(v));
+	// return 0;
+
 	auto start = chrono::high_resolution_clock::now();
 	vector<vector<int> > vect_rand;
 	srand (time(0));
 
 	int bestCost = INT_MAX;
-	for(int i=0; i<100; i++){
-		// vect = random_startNew(vect, k);
-		// vect_copy = vect;
-		vect_rand = random_start(vect, k);
-		// cout<<"random start: "<<endl;
-		// printList(vect_rand);
-		int initial_cost = costNode(vect_rand,INT_MAX);
-		cout<<"cost: "<<initial_cost<<endl;
-		int localCost = local_search(vect_rand, initial_cost);
-		cout << "Cost after local search is " << localCost << endl; 
-		cout << "Output matrix:" <<endl;
-		printList(vect_rand);
-		
-		if(bestCost > localCost) bestCost = localCost;
-	    auto end = chrono::high_resolution_clock::now(); 
-
-	    double time_taken = chrono::duration_cast<chrono::nanoseconds>(end - start).count(); 
-	  
-	    time_taken *= 1e-9; 
-	  
-	    cout << "Time taken by program is : " << fixed << time_taken << setprecision(9); 
-	    cout << " sec" << endl;
+	int extraLen = 0;
+	vector<vector<int> > bestVect;
+	while(extraLen < 3){
+		int lenBest = INT_MAX;
+		vector<vector<int> > lenVect;
+		for(int i=0; i<1000; i++){
+			// vect = random_startNew(vect, k);
+			// vect_copy = vect;
+			vect_rand = random_start(vect, k+extraLen);
+			// cout<<"random start: "<<endl;
+			// printList(vect_rand);
+			int initial_cost = costNode(vect_rand,INT_MAX);
+			// cout<<"cost: "<<initial_cost<<endl;
+			int localCost = local_search(vect_rand, initial_cost);
+			// cout << "Cost after local search is " << localCost << endl; 
+			// cout << "Output matrix:" <<endl;
+			// printChar(convertBack(vect_rand));
+			// printList(vect_rand);
+			if(lenBest > localCost){
+				lenBest = localCost;
+				lenVect = vect_rand;
+			} 
+		    
+		}
+		extraLen++;
+		cout<<"len best "<<extraLen-1<<" cost: "<<lenBest<<endl;
+		if(bestCost > lenBest){
+			bestCost = lenBest;
+			bestVect = lenVect;
+		} 
 	}
-
+	cout<<endl<<endl;
 	cout<<"BEST Cost: "<<bestCost<<endl;
+	printChar(convertBack(bestVect));
+
+	auto end = chrono::high_resolution_clock::now(); 
+
+    double time_taken = chrono::duration_cast<chrono::nanoseconds>(end - start).count(); 
+  
+    time_taken *= 1e-9; 
+  
+    cout << "Time taken by program is : " << fixed << time_taken << setprecision(9); 
+    cout << " sec" << endl;
+
 	return 0;
-}
+}	
