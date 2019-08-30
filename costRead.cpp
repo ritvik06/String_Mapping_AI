@@ -314,11 +314,13 @@ int main(int argc,char *argv[]){
 			// cout<<"Before Rand Jump:"<<endl;
 			// printList(vect_rand);
 
-			int timer=sec.count()*1e-9;
-
-			if(timer>(Tmax-0.1)){
-				for(int i=0;i<bestVect.size();i++){
-					for(int j=0;j<bestVect[i].size();j++){
+			float timer=(sec.count()*1e-9);
+			cout << timer << endl;
+			// cout << "Tmax" << Tmax << endl;
+			if(timer>((Tmax*60)-1)){
+				cout << "Time Out" << endl;
+				for(int i=0;i<lenVect.size();i++){
+					for(int j=0;j<lenVect[i].size();j++){
 						output << output_matrix[i][j];
 					}
 					output << endl;
@@ -354,13 +356,13 @@ int main(int argc,char *argv[]){
 		} 
 		lenVect.clear();
 		vect_rand.clear();
-		// output_matrix = convertBack(bestVect);	
 
 	}
 	// cout<<endl<<endl;
 	// cout<<"BEST Cost: "<<bestCost<<endl;
 	// printChar(output_matrix);
-	
+	output_matrix = convertBack(bestVect);	
+
 	for(int i=0;i<bestVect.size();i++){
 		for(int j=0;j<bestVect[i].size();j++){
 			output << output_matrix[i][j];
