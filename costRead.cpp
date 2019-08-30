@@ -69,7 +69,7 @@ vector<vector<int> > readFile(int &k, int &dashCost,char *file){
 	// cout<< endl;
 	inFile >> s_len;
 	// inFile >> s_len;
-	cout<<"s_len "<<s_len<<endl;
+	// cout<<"s_len "<<s_len<<endl;
 	vector<string> s(s_len);
 	k = 0;
 	for(int i=0; i<s_len; i++){
@@ -89,9 +89,9 @@ vector<vector<int> > readFile(int &k, int &dashCost,char *file){
 	for(int i=0 ;i<(charCount+1); i++){
 		for(int j=0; j<(charCount+1); j++){
 			inFile >> costMatrix[i][j];
-			cout << costMatrix[i][j]<<" ";
+			// cout << costMatrix[i][j]<<" ";
 		}
-		cout<<endl;
+		// cout<<endl;
 	}
 
 	inFile.close();
@@ -105,8 +105,8 @@ vector<vector<int> > readFile(int &k, int &dashCost,char *file){
 		}
 	}
 	s.clear();
-	cout<<endl;
-	cout<<"Converted string input is:" <<endl;
+	// cout<<endl;
+	// cout<<"Converted string input is:" <<endl;
 	// printList(vect);
 	return vect ;
 }
@@ -316,15 +316,15 @@ int main(int argc,char *argv[]){
 
 			int timer=sec.count()*1e-9;
 
-			// if(timer>((int)Tmax)-1){
-			// 	for(int i=0;i<bestVect.size();i++){
-			// 		for(int j=0;j<bestVect[i].size();j++){
-			// 			output << output_matrix[i][j];
-			// 		}
-			// 		output << endl;
-			// 	} 
-			// return 0;
-			// }
+			if(timer>(Tmax-0.1)){
+				for(int i=0;i<bestVect.size();i++){
+					for(int j=0;j<bestVect[i].size();j++){
+						output << output_matrix[i][j];
+					}
+					output << endl;
+				} 
+			return 0;
+			}
 
 			if (rand()%10 < 5) vect_rand = random_start(vect, k+extraLen);
 			else randomJump(vect_rand);
@@ -343,22 +343,23 @@ int main(int argc,char *argv[]){
 				lenBest = localCost;
 				lenVect = vect_rand;
 			} 
+			output_matrix = convertBack(lenVect);
 		    
 		}
 		extraLen++;
-		cout<<"len best "<<extraLen-1<<" cost: "<<lenBest<<endl;
+		// cout<<"len best "<<extraLen-1<<" cost: "<<lenBest<<endl;
 		if(bestCost > lenBest){
 			bestCost = lenBest;
 			bestVect = lenVect;
 		} 
 		lenVect.clear();
 		vect_rand.clear();
-		output_matrix = convertBack(bestVect);	
+		// output_matrix = convertBack(bestVect);	
 
 	}
-	cout<<endl<<endl;
-	cout<<"BEST Cost: "<<bestCost<<endl;
-	printChar(output_matrix);
+	// cout<<endl<<endl;
+	// cout<<"BEST Cost: "<<bestCost<<endl;
+	// printChar(output_matrix);
 	
 	for(int i=0;i<bestVect.size();i++){
 		for(int j=0;j<bestVect[i].size();j++){
@@ -374,8 +375,8 @@ int main(int argc,char *argv[]){
   
     time_taken *= 1e-9; 
  
-    cout << "Time taken by program is : " << fixed << time_taken << setprecision(9); 
-    cout << " sec" << endl;
+    // cout << "Time taken by program is : " << fixed << time_taken << setprecision(9); 
+    // cout << " sec" << endl;
 
 	return 0;
 }	
