@@ -5,7 +5,7 @@
 
 using namespace std;
 
-int Tmax;
+float Tmax;
 int ritvik=0;
 
 int **costMatrix;
@@ -49,9 +49,9 @@ vector<vector<int> > readFile(int &k, int &dashCost,char *file){
 	}
 
 	inFile >> Tmax;
-	cout << Tmax <<endl;
+	// cout << Tmax <<endl;
 	inFile >> charCount;
-	cout << charCount <<endl;
+	// cout << charCount <<endl;
 	int word;
 	int index = 1;
 	char c;
@@ -60,13 +60,13 @@ vector<vector<int> > readFile(int &k, int &dashCost,char *file){
 	indexChar[0] = '-';
 	for(int i=0; i<charCount; i++){
 		inFile >> c;
-		cout << c <<", ";
+		// cout << c <<", ";
 		if(i!= charCount-1) inFile >> comma;
 		charIndex[c] = i+1;
 		indexChar[i+1] = c;
 	}
 
-	cout<< endl;
+	// cout<< endl;
 	inFile >> s_len;
 	// inFile >> s_len;
 	cout<<"s_len "<<s_len<<endl;
@@ -75,7 +75,7 @@ vector<vector<int> > readFile(int &k, int &dashCost,char *file){
 	for(int i=0; i<s_len; i++){
 		inFile >> s[i];
 		if(k<s[i].size()) k = s[i].size();
-		cout << s[i] <<endl;
+		// cout << s[i] <<endl;
 	}
 
 	inFile >> dashCost;
@@ -300,7 +300,7 @@ int main(int argc,char *argv[]){
 
 	int bestCost = INT_MAX;
 	int extraLen = 0;
-	int time_len = 6;
+	int time_len = 10;
 	vector<vector<int> > bestVect;
 	ofstream output(output_file);
 
@@ -313,6 +313,19 @@ int main(int argc,char *argv[]){
 			auto sec = curr - start;
 			// cout<<"Before Rand Jump:"<<endl;
 			// printList(vect_rand);
+
+			int timer=sec.count()*1e-9;
+
+			// if(timer>((int)Tmax)-1){
+			// 	for(int i=0;i<bestVect.size();i++){
+			// 		for(int j=0;j<bestVect[i].size();j++){
+			// 			output << output_matrix[i][j];
+			// 		}
+			// 		output << endl;
+			// 	} 
+			// return 0;
+			// }
+
 			if (rand()%10 < 5) vect_rand = random_start(vect, k+extraLen);
 			else randomJump(vect_rand);
 			// cout<<"After Rand Jump:"<<endl;
@@ -340,10 +353,11 @@ int main(int argc,char *argv[]){
 		} 
 		lenVect.clear();
 		vect_rand.clear();
+		output_matrix = convertBack(bestVect);	
+
 	}
 	cout<<endl<<endl;
 	cout<<"BEST Cost: "<<bestCost<<endl;
-	output_matrix = convertBack(bestVect);	
 	printChar(output_matrix);
 	
 	for(int i=0;i<bestVect.size();i++){
