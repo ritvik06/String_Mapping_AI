@@ -306,6 +306,7 @@ int main(int argc,char *argv[]){
 	int bestCost = INT_MAX;
 	int extraLen = 0;
 	int time_len = 10;
+	float timer2=0;				////////////////////////////////////
 	vector<vector<int> > bestVect;
 	ofstream output(output_file);
 
@@ -322,7 +323,7 @@ int main(int argc,char *argv[]){
 			float timer=(sec.count()*1e-9);
 			// cout << timer << endl;
 			// cout << "Tmax" << Tmax << endl;
-			if(timer>((Tmax*60)-1)){
+			if(timer+timer2>((Tmax*60)-1)){								//////////////////////////////////////
 				// cout << "Time Out" << endl;
 				cout<<costNode(lenVect,INT_MAX);
 				for(int i=0;i<lenVect.size();i++){
@@ -331,6 +332,10 @@ int main(int argc,char *argv[]){
 					}
 					output << endl;
 				} 
+				curr = chrono::high_resolution_clock::now();
+				sec = curr - start;
+				timer=(sec.count()*1e-9);
+				cout<<"timer out"<<timer<<endl;
 			return 0;
 			}
 
@@ -343,8 +348,11 @@ int main(int argc,char *argv[]){
 			int initial_cost = costNode(vect_rand,INT_MAX);
 			max_hill_climbs = 0;
 			// cout<<"cost: "<<initial_cost<<endl;
-			int localCost = local_search(vect_rand, initial_cost);
-			cout << "Cost after local search is " << localCost << endl; 
+			int localCost = local_search(vect_rand, initial_cost);							
+			curr = chrono::high_resolution_clock::now();									/////////////////////////
+			sec = curr - start;																///////////////////////
+			timer2=(sec.count()*1e-9);													//////////////////////////////
+			cout << "Cost after local search is " << localCost << " time "<<timer2-timer << endl; 
 			// cout << "Output matrix:" <<endl;
 			// printChar(convertBack(vect_rand));
 			// printList(vect_rand);
